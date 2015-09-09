@@ -13,7 +13,19 @@ exports.app = function (options) {
 
     return function (req, res, next) {
 
-        var url = options.sourceBaseUrl + req.params[0];
+    	var uri = req.params[0];
+    	var uriParts = uri.substring(1).split("/");
+    	var hostname = uriParts.shift();
+    	uri = "/" + uriParts.join("/");
+
+    	if (!options.routes[hostname]) {
+    		console.log("Warning: No route configured for hostname '" + hostname + "'!");
+    		res.writeHead(404);
+    		res.end("Not Found");
+    		return;
+    	}
+
+        var url = options.routes[hostname] + uri;
 
         return cache.get(url, {
 			loadBody: false,
