@@ -24,13 +24,20 @@ exports.app = function (options) {
     		res.end("Not Found");
     		return;
     	}
+    	
+    	if (typeof options.routes[hostname] === "string") {
+    		options.routes[hostname] = {
+    			"baseUrl": options.routes[hostname]
+    		};
+    	}
+    	options.routes[hostname].headers = options.routes[hostname].headers || {};
 
-        var url = options.routes[hostname] + uri;
+        var url = options.routes[hostname].baseUrl + uri;
 
         return cache.get(url, {
 			loadBody: false,
 			nohead: true,
-//			headers: req.headers,
+			headers: options.routes[hostname].headers,
 			useExistingOnError: true
 		}, function(err, response) {
 			if (err) return next(err);
