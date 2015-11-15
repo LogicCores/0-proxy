@@ -1,6 +1,13 @@
 
-// TODO: Load adapters as needed on demand
+exports.forLib = function (LIB) {
 
-exports.adapters = {
-    "smi.cache": require("./for/smi.cache")
+    var exports = {};
+
+    // TODO: Load adapters as needed on demand
+    
+    exports.adapters = {
+        "smi.cache": require("./for/smi.cache").forLib(LIB)
+    }
+
+    return exports;
 }
